@@ -111,53 +111,8 @@ def numpyify_face_windows(face_windows, sequence_len = 15*25):
     
     
 def normalize_face_window(numpy_window):
-    # not used, need upgrade to normalize face angles
-    # numpy_window_normalized = numpy_window.copy()
-    # numpy_window_normalized[:,:,0] = (numpy_window[:,:,0] - np.min(numpy_window[:,:,0])) / (np.max(numpy_window[:,:,0]) - np.min(numpy_window[:,:,0]))
-    # numpy_window_normalized[:,:,1] = (numpy_window[:,:,1] - np.min(numpy_window[:,:,1])) / (np.max(numpy_window[:,:,1]) - np.min(numpy_window[:,:,1]))
-    # numpy_window_normalized[:,:,2] = (numpy_window[:,:,2] - np.min(numpy_window[:,:,2])) / (np.max(numpy_window[:,:,2]) - np.min(numpy_window[:,:,2]))
-    # return numpy_window_normalized
-    pass
-
-def normalize_landmarks(landmarks):
-    # normalize landmarks to 0-1 x,y,z
-    # input, batch_size,478,3
-    # normalize landmark to 0-1 x,y,z
-    landmarks[:,:,0] = (landmarks[:,:,0] - landmarks[:,:,0].min())/(landmarks[:,:,0].max()-landmarks[:,:,0].min())
-    landmarks[:,:,1] = (landmarks[:,:,1] - landmarks[:,:,1].min())/(landmarks[:,:,1].max()-landmarks[:,:,1].min())
-    landmarks[:,:,2] = (landmarks[:,:,2] - landmarks[:,:,2].min())/(landmarks[:,:,2].max()-landmarks[:,:,2].min())
-    # print(np.min(landmarks[:,:,0],axis=1))
-    return landmarks
-    
-    
-
-def vis_landmark_2d(landmark):
-    # generate 3 views of 2d normalized landmarks, to 3 512x512 images, put in a canvas side by side
-    
-    canvas = np.ones((512+16*2,512*3+16*4,3),dtype=np.uint8)*64
-    canvas_1 = np.zeros((512,512,3),dtype=np.uint8)
-    canvas_2 = np.zeros((512,512,3),dtype=np.uint8)
-    canvas_3 = np.zeros((512,512,3),dtype=np.uint8)
-    
-    for i in range(landmark.shape[0]):
-        cv2.circle(canvas_1,(int(landmark[i,0]*512),int(landmark[i,1]*512)),2,(0,255,0),-1)
-    for i in range(landmark.shape[0]):
-        cv2.circle(canvas_2,(int(landmark[i,0]*512),int(landmark[i,2]*512)),2,(0,255,0),-1)
-    for i in range(landmark.shape[0]):
-        cv2.circle(canvas_3,(int(landmark[i,2]*512),int(landmark[i,1]*512)),2,(0,255,0),-1)
-    canvas[16:16+512,
-        16:16+512] = canvas_1
-    canvas[16:16+512,
-        16*2+512:16*2+512*2] = canvas_2
-    canvas[16:16+512,
-        16*3+512*2:16*3+512*3] = canvas_3
-    return canvas
-
-def save_landmarks_video(landmarks,output_path = "output.mp4"):
-    # give a list of normalized landmarks, save to a video
-    h,w,fps = 512+16*2,512*3+16*4,25
-    writer = cv2.VideoWriter(output_path,
-                             cv2.VideoWriter_fourcc(*"mp4v"),fps,(w,h))
-    for landmark in landmarks:
-        writer.write(vis_landmark_2d(landmark).astype('uint8'))
-    writer.release()
+    numpy_window_normalized = numpy_window.copy()
+    numpy_window_normalized[:,:,0] = (numpy_window[:,:,0] - np.min(numpy_window[:,:,0])) / (np.max(numpy_window[:,:,0]) - np.min(numpy_window[:,:,0]))
+    numpy_window_normalized[:,:,1] = (numpy_window[:,:,1] - np.min(numpy_window[:,:,1])) / (np.max(numpy_window[:,:,1]) - np.min(numpy_window[:,:,1]))
+    numpy_window_normalized[:,:,2] = (numpy_window[:,:,2] - np.min(numpy_window[:,:,2])) / (np.max(numpy_window[:,:,2]) - np.min(numpy_window[:,:,2]))
+    return numpy_window_normalized
