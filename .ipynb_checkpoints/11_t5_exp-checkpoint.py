@@ -33,7 +33,7 @@ for data_line in dicts:
     if valid:
         filtered_data.append(data_line)
 print(len(filtered_data))
-medium_dataset = Dataset.from_list(filtered_data[:5000])
+medium_dataset = Dataset.from_list(filtered_data[:])
 
 # process data for training https://huggingface.co/docs/datasets/en/process
 # split first so there's no leaking
@@ -46,15 +46,15 @@ medium_dataset = medium_dataset.train_test_split(test_size=1000)
 # process for training
 import nltk
 import string
-nltk.download('punkt')
+# nltk.download('punkt')
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
 model = AutoModelForSeq2SeqLM.from_pretrained("/data/agent_h/llms/umt5-small")
 tokenizer = AutoTokenizer.from_pretrained("/data/agent_h/llms/umt5-small")
 
 prefix = "summarize: "
-max_input_length = 512
-max_target_length = 64
+max_input_length = 1024
+max_target_length = 128
 
 
 def clean_text(text):
@@ -125,7 +125,7 @@ tokenized_datasets = medium_dataset.map(preprocess_data,
 
 from transformers import AutoModelForSeq2SeqLM, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer
 
-batch_size = 8
+batch_size = 32
 base_model = "/data/agent_h/llms/umt5-small"
 model_name = "umt5-small-medium-title-generation"
 model_dir = f"/data/agent_h/checkpoints/{model_name}"
@@ -143,9 +143,9 @@ args = Seq2SeqTrainingArguments(
     per_device_eval_batch_size=batch_size,
     weight_decay=0.01,
     save_total_limit=3,
-    num_train_epochs=1,
+    num_train_epochs=10,
     predict_with_generate=True,
-    fp16=True,
+    # fp16=True,
     load_best_model_at_end=True,
     metric_for_best_model="rouge1",
     report_to="tensorboard"

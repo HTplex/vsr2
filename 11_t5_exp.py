@@ -54,7 +54,7 @@ tokenizer = AutoTokenizer.from_pretrained("/data/agent_h/llms/umt5-small")
 
 prefix = "summarize: "
 max_input_length = 512
-max_target_length = 64
+max_target_length = 128
 
 
 def clean_text(text):
@@ -143,15 +143,14 @@ args = Seq2SeqTrainingArguments(
     per_device_eval_batch_size=batch_size,
     weight_decay=0.01,
     save_total_limit=3,
-    num_train_epochs=10,
+    num_train_epochs=100,
     predict_with_generate=True,
-    fp16=True,
-    load_best_model_at_end=True,
-    metric_for_best_model="rouge1",
+    # fp16=True,
+    bf16=True,
     report_to="tensorboard"
 )
 data_collator = DataCollatorForSeq2Seq(tokenizer)
-metric = load_metric("rouge")
+# metric = load_metric("rouge")
 
 def model_init():
     return AutoModelForSeq2SeqLM.from_pretrained(base_model)
@@ -163,7 +162,6 @@ trainer = Seq2SeqTrainer(
     eval_dataset=tokenized_datasets["test"],
     data_collator=data_collator,
     tokenizer=tokenizer,
-    compute_metrics=compute_metrics
 )
 
 
