@@ -22,7 +22,7 @@ if __name__ == "__main__":
     save_root = "/data1/agent_h/data/datasets/zhiyun_part_result/"
     os.makedirs(save_root,exist_ok=True)
     part_x,part_y = int(args.partition.split("/")[0]),int(args.partition.split("/")[1])
-    all_video_paths = glob("/data1/agent_h/data/datasets/zhiyun_part/**/*.mp4", recursive=True)
+    all_video_paths = glob("/data1/agent_h/data/datasets/zhiyun_part/**/*.wav", recursive=True)
     print("total n videos", len(all_video_paths))
     # parition
     part_video_paths = []
@@ -31,7 +31,7 @@ if __name__ == "__main__":
             part_video_paths.append(video_path)
     all_video_paths = part_video_paths
     
-    model = whisper.load_model("large-v3")
+    model = whisper.load_model("large-v3",download_root="/data1/agent_h/data/checkpoints/vsr2/")
 
     for video_path in all_video_paths:
         print(video_path)

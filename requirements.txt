@@ -1,3 +1,4 @@
+openai-whisper
 transformers
 torch
 torchvision
