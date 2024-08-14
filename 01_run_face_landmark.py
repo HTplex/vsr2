@@ -12,15 +12,15 @@ from mediapipe_util import *
 import gzip
 
 
-model_path = './data/face_landmarker.task'
+model_path = '/data1/agent_h/data/checkpoints/vsr2/face_landmarker.task'
+# all_video_paths = glob("/data/agent_h/datasets_chunyu/clip_videos_v3/**/*.mp4", recursive=True)
+all_video_paths = glob("/data1/agent_h/data/datasets/zhiyun_part/**/*.mp4", recursive=True)
 
-
-all_video_paths = glob("/data/agent_h/datasets_chunyu/clip_videos_v3/**/*.mp4", recursive=True)
 print(len(all_video_paths))
 
 
 def video_face_landmark_worker(video_path):
-    output_root = "/data/agent_h/vsr_landmark_result_v3/"
+    output_root = "/data1/agent_h/data/datasets/zhiyun_part_result/"
     os.makedirs(output_root,exist_ok=True)
     save_path = join(output_root,basename(video_path)[:-4]+".FaceLandmarkerResultListzip")
     if os.path.exists(save_path):

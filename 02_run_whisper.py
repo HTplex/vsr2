@@ -19,10 +19,10 @@ args = parser.parse_args()
 # Rest of the code
 
 if __name__ == "__main__":
-    save_root = "/data/agent_h/whisper_result_v3/"
+    save_root = "/data1/agent_h/data/datasets/zhiyun_part_result/"
     os.makedirs(save_root,exist_ok=True)
     part_x,part_y = int(args.partition.split("/")[0]),int(args.partition.split("/")[1])
-    all_video_paths = glob("/data/agent_h/datasets_chunyu/clip_videos_v3/**/*.mp4", recursive=True)
+    all_video_paths = glob("/data1/agent_h/data/datasets/zhiyun_part/**/*.mp4", recursive=True)
     print("total n videos", len(all_video_paths))
     # parition
     part_video_paths = []
@@ -47,21 +47,21 @@ if __name__ == "__main__":
      
 '''
 
-CUDA_VISIBLE_DEVICES=0 python run_whisper.py -x 0/16 &
-CUDA_VISIBLE_DEVICES=0 python run_whisper.py -x 1/16 &
-CUDA_VISIBLE_DEVICES=1 python run_whisper.py -x 2/16 &
-CUDA_VISIBLE_DEVICES=1 python run_whisper.py -x 3/16 &
-CUDA_VISIBLE_DEVICES=2 python run_whisper.py -x 4/16 &
-CUDA_VISIBLE_DEVICES=2 python run_whisper.py -x 5/16 &
-CUDA_VISIBLE_DEVICES=3 python run_whisper.py -x 6/16 &
-CUDA_VISIBLE_DEVICES=3 python run_whisper.py -x 7/16 &
-CUDA_VISIBLE_DEVICES=4 python run_whisper.py -x 8/16 &
-CUDA_VISIBLE_DEVICES=4 python run_whisper.py -x 9/16 &
-CUDA_VISIBLE_DEVICES=5 python run_whisper.py -x 10/16 &
-CUDA_VISIBLE_DEVICES=5 python run_whisper.py -x 11/16 &
-CUDA_VISIBLE_DEVICES=6 python run_whisper.py -x 12/16 &
-CUDA_VISIBLE_DEVICES=6 python run_whisper.py -x 13/16 &
-CUDA_VISIBLE_DEVICES=7 python run_whisper.py -x 14/16 &
-CUDA_VISIBLE_DEVICES=7 python run_whisper.py -x 15/16 &
+CUDA_VISIBLE_DEVICES=0 python 02_run_whisper.py -x 0/16 &
+CUDA_VISIBLE_DEVICES=0 python 02_run_whisper.py -x 1/16 &
+CUDA_VISIBLE_DEVICES=1 python 02_run_whisper.py -x 2/16 &
+CUDA_VISIBLE_DEVICES=1 python 02_run_whisper.py -x 3/16 &
+CUDA_VISIBLE_DEVICES=2 python 02_run_whisper.py -x 4/16 &
+CUDA_VISIBLE_DEVICES=2 python 02_run_whisper.py -x 5/16 &
+CUDA_VISIBLE_DEVICES=3 python 02_run_whisper.py -x 6/16 &
+CUDA_VISIBLE_DEVICES=3 python 02_run_whisper.py -x 7/16 &
+CUDA_VISIBLE_DEVICES=4 python 02_run_whisper.py -x 8/16 &
+CUDA_VISIBLE_DEVICES=4 python 02_run_whisper.py -x 9/16 &
+CUDA_VISIBLE_DEVICES=5 python 02_run_whisper.py -x 10/16 &
+CUDA_VISIBLE_DEVICES=5 python 02_run_whisper.py -x 11/16 &
+CUDA_VISIBLE_DEVICES=6 python 02_run_whisper.py -x 12/16 &
+CUDA_VISIBLE_DEVICES=6 python 02_run_whisper.py -x 13/16 &
+CUDA_VISIBLE_DEVICES=7 python 02_run_whisper.py -x 14/16 &
+CUDA_VISIBLE_DEVICES=7 python 02_run_whisper.py -x 15/16 &
 
 '''

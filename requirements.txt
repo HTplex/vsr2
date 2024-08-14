@@ -5,4 +5,5 @@ torchaudio
 opencv-python
 jupyterlab
 retina-face
-
+mediapipe
+whisper
