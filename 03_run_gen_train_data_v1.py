@@ -13,16 +13,19 @@ from tqdm import tqdm
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-x", "--partition", help="partition 1/2")
+parser.add_argument("-x", "--partition", default="0/1", help="partition 1/2")
 args = parser.parse_args()
 if __name__ == "__main__":
+    video_root = "/data1/agent_h/data/datasets/zhiyun_part/"
+    whisper_root = "/data1/agent_h/data/datasets/zhiyun_part_result/"
+    mediapipe_root = "/data1/agent_h/data/datasets/zhiyun_part_result/"
+    save_path = "/data1/agent_h/data/datasets/zhiyun_mouth_clips_5s_25fps_08142022/"
+
     part_x,part_y = int(args.partition.split("/")[0]),int(args.partition.split("/")[1])
-    video_root = "/data/agent_h/datasets_chunyu/clip_videos_v3/"
     video_paths = sorted(glob(join(video_root,"**/*.mp4"),recursive=True))
-    whisper_root = "/data/agent_h/datasets_chunyu/whisper_result_v3/"
-    whisper_paths = sorted(glob(join(whisper_root,"*")))
-    mediapipe_root = "/data/agent_h/datasets_chunyu/vsr_landmark_result_v3/"
-    mediapipe_paths = sorted(glob(join(mediapipe_root,"*")))
+    whisper_paths = sorted(glob(join(whisper_root,"*_whisper.json")))
+    mediapipe_paths = sorted(glob(join(mediapipe_root,"*.FaceLandmarkerResultListzip")))
+    os.makedirs(save_path, exist_ok=True)
 
     # 1. form whiper and face into frames
 
@@ -43,19 +46,18 @@ if __name__ == "__main__":
             whisper_result = json.load(fp)
 
 
-        save_path = "/data/agent_h/face_text_windows_del/"
-        os.makedirs(save_path, exist_ok=True)
 
-        text_windows = get_whisper_text_windows(whisper_result, clip_len=15, window_len=3)
+
+        text_windows = get_whisper_text_windows(whisper_result, clip_len=5, window_len=3)
         # pprint(text_windows)
 
             
-        face_windows = get_mediapipe_windows(mediapipe_paths[video_idx], clip_len=15, window_len=3)
+        face_windows = get_mediapipe_windows(mediapipe_paths[video_idx], clip_len=5, window_len=3)
         # numpy_window_normalized = normalize_face_window(numpy_window[3:,:,:])
         for key,text in text_windows.items():
             if key not in face_windows:
                 continue
-            numpy_window = numpyify_face_windows(face_windows[key],sequence_len=15*25)
+            numpy_window = numpyify_face_windows(face_windows[key],sequence_len=5*25)
             base_name = basename(whisper_json_path)[:-12]+"{}_{}".format(key.split("/")[0],key.split("/")[1])
             text_save_batch.append({'id':base_name, 'text':text})
             face_save_batch.append(numpy_window)
