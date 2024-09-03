@@ -50,4 +50,5 @@ trainer = Seq2SeqTrainer(
     tokenizer=tokenizer,
 )
 
-trainer.train()
+
+trainer.train() 

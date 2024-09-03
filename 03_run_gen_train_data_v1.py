@@ -19,7 +19,7 @@ if __name__ == "__main__":
     video_root = "/data1/agent_h/data/datasets/zhiyun_part/"
     whisper_root = "/data1/agent_h/data/datasets/zhiyun_part_result/"
     mediapipe_root = "/data1/agent_h/data/datasets/zhiyun_part_result/"
-    save_path = "/data1/agent_h/data/datasets/zhiyun_mouth_clips_5s_25fps_08142022/"
+    save_path = "/data1/agent_h/data/datasets/zhiyun_mouth_clips_4s_30fps_08162024/"
 
     part_x,part_y = int(args.partition.split("/")[0]),int(args.partition.split("/")[1])
     video_paths = sorted(glob(join(video_root,"**/*.mp4"),recursive=True))
@@ -48,16 +48,16 @@ if __name__ == "__main__":
 
 
 
-        text_windows = get_whisper_text_windows(whisper_result, clip_len=5, window_len=3)
+        text_windows = get_whisper_text_windows(whisper_result, clip_len=4, window_len=3)
         # pprint(text_windows)
 
             
-        face_windows = get_mediapipe_windows(mediapipe_paths[video_idx], clip_len=5, window_len=3)
+        face_windows = get_mediapipe_windows(mediapipe_paths[video_idx], clip_len=4, window_len=3)
         # numpy_window_normalized = normalize_face_window(numpy_window[3:,:,:])
         for key,text in text_windows.items():
             if key not in face_windows:
                 continue
-            numpy_window = numpyify_face_windows(face_windows[key],sequence_len=5*25)
+            numpy_window = numpyify_face_windows(face_windows[key],sequence_len=4*30)
             base_name = basename(whisper_json_path)[:-12]+"{}_{}".format(key.split("/")[0],key.split("/")[1])
             text_save_batch.append({'id':base_name, 'text':text})
             face_save_batch.append(numpy_window)
